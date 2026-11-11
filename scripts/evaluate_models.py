@@ -50,7 +50,7 @@ for model_id, (name, file) in MODELS.items():
     models[model_id] = {
         "name": name,
         "algorithm": type(est).__name__,
-        "best_params": {k: v for k, v in grid.best_params_.items()},
+        "best_params": dict(grid.best_params_),
         "accuracy": round(accuracy_score(y_test, pred), 4),
         "precision": round(precision_score(y_test, pred), 4),
         "recall": round(recall_score(y_test, pred), 4),

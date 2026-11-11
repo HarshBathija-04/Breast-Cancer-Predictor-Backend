@@ -1,7 +1,7 @@
 import math
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from .catalog import DEFAULT_MODEL, FEATURES, MODELS
 
@@ -33,7 +33,3 @@ class PredictIn(BaseModel):
             if not math.isfinite(x) or not 0 <= x <= MAX_VALUE:
                 raise ValueError(f"{name} must be a number between 0 and {MAX_VALUE:g}")
         return v
-
-
-class ExplainIn(PredictIn):
-    compare: bool = Field(default=False, exclude=True)

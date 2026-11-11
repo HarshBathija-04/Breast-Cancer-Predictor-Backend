@@ -1,6 +1,7 @@
 import logging
+from functools import cache
 
-from flask import Flask, jsonify, request
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -13,20 +14,13 @@ from .catalog import DEFAULT_MODEL, FEATURES, MODELS
 from .config import Config
 from .explain import ExplainError, build_prompt, explain
 from .ml import ModelRegistry
-from .schemas import ExplainIn, PredictIn
+from .schemas import PredictIn
 
 log = logging.getLogger("predictor")
 DISCLAIMER = (
     "Educational demo only. Not a medical device and not a diagnosis. Always consult a qualified clinician."
 )
-_registry = None
-
-
-def get_registry():
-    global _registry
-    if _registry is None:
-        _registry = ModelRegistry()
-    return _registry
+get_registry = cache(ModelRegistry)
 
 
 def error(status, code, message, details=None):
@@ -84,11 +78,11 @@ def create_app(cfg=None):
         log.exception("unhandled error")
         return error(500, "internal_error", "Something went wrong on our side.")
 
-    def parse(schema):
+    def parse_body():
         body = request.get_json(silent=True)
         if not isinstance(body, dict):
-            return None
-        return schema.model_validate(body)
+            abort(400, "Expected a JSON object body.")
+        return PredictIn.model_validate(body)
 
     def run_prediction(model_id, values):
         label, prob = registry.predict(model_id, values)
@@ -97,9 +91,6 @@ def create_app(cfg=None):
             "diagnosis": "malignant" if label == 1 else "benign",
             "probability_malignant": prob,
         }
-
-    def bad_body():
-        return error(400, "bad_request", "Expected a JSON object body.")
 
     @app.get("/health")
     @limiter.exempt
@@ -127,9 +118,7 @@ def create_app(cfg=None):
     @app.post("/api/predict")
     @limiter.limit("60 per minute")
     def predict():
-        body = parse(PredictIn)
-        if body is None:
-            return bad_body()
+        body = parse_body()
         result = run_prediction(body.model, body.features)
         prediction_id = None
         try:
@@ -155,9 +144,7 @@ def create_app(cfg=None):
     @app.post("/api/explain")
     @limiter.limit("10 per minute; 100 per day")
     def explain_prediction():
-        body = parse(ExplainIn)
-        if body is None:
-            return bad_body()
+        body = parse_body()
         # Recompute server-side so the explanation always matches the real model output.
         result = run_prediction(body.model, body.features)
         stats = registry.metrics["feature_stats"]
@@ -194,9 +181,7 @@ def create_app(cfg=None):
     @limiter.limit("60 per minute")
     def legacy_predict():
         """Original v1 contract ({"features": [30 numbers]} -> {"prediction": 0|1}), kept for old clients."""
-        body = parse(PredictIn)
-        if body is None:
-            return bad_body()
+        body = parse_body()
         return jsonify(prediction=run_prediction(body.model, body.features)["label"])
 
     return app
