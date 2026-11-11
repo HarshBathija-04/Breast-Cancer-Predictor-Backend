@@ -1,12 +1,6 @@
-import type { PredictResponse } from "../lib/api";
-import { pct } from "../lib/api";
+import { pct, type Async, type PredictResponse } from "../lib/api";
 import { featureLabel } from "../lib/features";
-
-export type Async<T> =
-  | { state: "idle" }
-  | { state: "loading" }
-  | { state: "error"; message: string }
-  | { state: "done"; data: T };
+import { ErrorState } from "./ErrorState";
 
 interface Props {
   result: Async<PredictResponse>;
@@ -42,13 +36,7 @@ export function ResultPanel({ result, explanation, onExplain, onRetry }: Props) 
         {result.state === "idle" && <EmptyState />}
         {result.state === "loading" && <ResultSkeleton />}
         {result.state === "error" && (
-          <div role="alert" className="rounded-[var(--radius-md)] bg-malignant-soft p-4">
-            <p className="font-medium text-malignant">Prediction failed</p>
-            <p className="mt-1 text-sm text-ink-soft">{result.message}</p>
-            <button type="button" className="btn btn-ghost mt-3 text-sm" onClick={onRetry}>
-              Try again
-            </button>
-          </div>
+          <ErrorState title="Prediction failed" message={result.message} onRetry={onRetry} />
         )}
         {result.state === "done" && (
           <Verdict data={result.data} explanation={explanation} onExplain={onExplain} />
@@ -140,10 +128,7 @@ function Verdict({
       )}
 
       {out_of_range.length > 0 && (
-        <div
-          className="mt-4 rounded-[var(--radius-md)] bg-caution-soft p-3 text-sm text-caution"
-          role="note"
-        >
+        <div className="mt-4 rounded-md bg-caution-soft p-3 text-sm text-caution" role="note">
           <p className="font-medium">Outside the training range</p>
           <p className="mt-0.5">
             {out_of_range.map(featureLabel).join(", ")}. Predictions for unusual values are less

@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
 import { ModelComparison } from "./components/ModelComparison";
 import { PredictForm } from "./components/PredictForm";
 import { PredictionLog } from "./components/PredictionLog";
-import { ResultPanel, type Async } from "./components/ResultPanel";
+import { ResultPanel } from "./components/ResultPanel";
 import {
   api,
   ApiError,
   onWakeChange,
+  type Async,
   pct,
   type ModelsResponse,
   type PredictResponse,
@@ -17,6 +18,20 @@ import { emptyValues, parseValues, PRESETS, type FeatureValues } from "./lib/fea
 
 const message = (e: unknown) => (e instanceof ApiError ? e.message : "Something went wrong.");
 const REPO_URL = "https://github.com/HarshBathija-04/Breast-Cancer-Predictor-Backend";
+const NAV = [
+  ["Predict", "#predict"],
+  ["Models", "#models"],
+  ["Log", "#log"],
+  ["GitHub", REPO_URL],
+];
+
+// Only sets state from async callbacks, so it is safe to call from an effect.
+function load<T>(fetcher: () => Promise<T>, set: (s: Async<T>) => void) {
+  fetcher().then(
+    (data) => set({ state: "done", data }),
+    (e) => set({ state: "error", message: message(e) }),
+  );
+}
 
 export default function App() {
   const [models, setModels] = useState<Async<ModelsResponse>>({ state: "loading" });
@@ -31,23 +46,10 @@ export default function App() {
 
   useEffect(() => onWakeChange(setWaking), []);
 
-  // Initial state is already "loading", so these only set state from async callbacks.
-  const loadModels = useCallback(() => {
-    api.models().then(
-      (data) => setModels({ state: "done", data }),
-      (e) => setModels({ state: "error", message: message(e) }),
-    );
-  }, []);
-  const loadStats = useCallback(() => {
-    api.stats().then(
-      (data) => setStats({ state: "done", data }),
-      (e) => setStats({ state: "error", message: message(e) }),
-    );
-  }, []);
   useEffect(() => {
-    loadModels();
-    loadStats();
-  }, [loadModels, loadStats]);
+    load(api.models, setModels);
+    load(api.stats, setStats);
+  }, []);
 
   const run = async (input: { model: string; numbers: number[] }) => {
     setLastInput(input);
@@ -64,7 +66,7 @@ export default function App() {
             : ""),
         { description: data.model.name },
       );
-      if (data.logged) loadStats();
+      if (data.logged) load(api.stats, setStats);
       if (window.matchMedia("(max-width: 1023px)").matches) {
         document.getElementById("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }
@@ -103,7 +105,7 @@ export default function App() {
     <>
       <a
         href="#predict"
-        className="sr-only z-50 rounded-[var(--radius-md)] bg-brand px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        className="sr-only z-50 rounded-md bg-brand px-4 py-2 text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
       >
         Skip to the predictor
       </a>
@@ -116,30 +118,15 @@ export default function App() {
             <span>Breast Cancer Predictor</span>
           </a>
           <nav aria-label="Sections" className="hidden items-center gap-1 text-sm sm:flex">
-            <a
-              className="rounded-[6px] px-3 py-2 text-ink-soft hover:bg-sunken hover:text-ink"
-              href="#predict"
-            >
-              Predict
-            </a>
-            <a
-              className="rounded-[6px] px-3 py-2 text-ink-soft hover:bg-sunken hover:text-ink"
-              href="#models"
-            >
-              Models
-            </a>
-            <a
-              className="rounded-[6px] px-3 py-2 text-ink-soft hover:bg-sunken hover:text-ink"
-              href="#log"
-            >
-              Log
-            </a>
-            <a
-              className="rounded-[6px] px-3 py-2 text-ink-soft hover:bg-sunken hover:text-ink"
-              href={REPO_URL}
-            >
-              GitHub
-            </a>
+            {NAV.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                className="rounded-sm px-3 py-2 text-ink-soft transition-colors duration-150 hover:bg-sunken hover:text-ink"
+              >
+                {label}
+              </a>
+            ))}
           </nav>
         </div>
       </header>
@@ -189,7 +176,7 @@ export default function App() {
             Enter the 30 nucleus measurements from a fine-needle aspirate, see whether each
             classifier finds a benign or malignant pattern, and get a plain-language explanation.
           </p>
-          <dl className="mt-8 grid max-w-2xl grid-cols-3 gap-px overflow-hidden rounded-[var(--radius-md)] border border-line bg-line">
+          <dl className="mt-8 grid max-w-2xl grid-cols-3 gap-px overflow-hidden rounded-md border border-line bg-line">
             {[
               { k: "Best accuracy", v: best ? pct(best.accuracy) : null },
               { k: "Malignant recall", v: best ? pct(best.recall, 0) : null },
@@ -262,7 +249,7 @@ export default function App() {
             models={models}
             onRetry={() => {
               setModels({ state: "loading" });
-              loadModels();
+              load(api.models, setModels);
             }}
           />
           <PredictionLog
@@ -270,7 +257,7 @@ export default function App() {
             models={models}
             onRetry={() => {
               setStats({ state: "loading" });
-              loadStats();
+              load(api.stats, setStats);
             }}
           />
         </div>

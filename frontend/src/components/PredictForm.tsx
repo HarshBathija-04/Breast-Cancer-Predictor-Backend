@@ -78,7 +78,7 @@ export function PredictForm(p: Props) {
           id="model"
           value={p.model}
           onChange={(e) => p.onModel(e.target.value)}
-          className="mt-1.5 block h-11 w-full rounded-[var(--radius-md)] border border-line-strong bg-surface px-3 text-[0.9375rem]"
+          className="mt-1.5 block h-11 w-full rounded-md border border-line-strong bg-surface px-3 text-[0.9375rem]"
         >
           {(p.models ?? FALLBACK_MODELS).map((m) => (
             <option key={m.id} value={m.id}>
@@ -91,7 +91,7 @@ export function PredictForm(p: Props) {
       <div
         role="tablist"
         aria-label="Measurement group"
-        className="mt-5 grid grid-cols-3 gap-1 rounded-[var(--radius-md)] bg-sunken p-1"
+        className="mt-5 grid grid-cols-3 gap-1 rounded-md bg-sunken p-1"
         onKeyDown={(e) => {
           // ARIA tabs pattern: arrow keys move between tabs.
           const step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
@@ -116,7 +116,7 @@ export function PredictForm(p: Props) {
               tabIndex={selected ? 0 : -1}
               aria-controls={`panel-${g.stat}`}
               onClick={() => setTab(g.stat)}
-              className={`relative min-h-10 rounded-[6px] px-2 text-sm font-medium transition-[background-color,color,box-shadow] duration-150 ${
+              className={`relative min-h-10 rounded-sm px-2 text-sm font-medium transition-[background-color,color,box-shadow] duration-150 ${
                 selected
                   ? "bg-surface text-ink shadow-[var(--shadow-card)]"
                   : "text-ink-muted hover:text-ink"
@@ -165,7 +165,7 @@ export function PredictForm(p: Props) {
                     onChange={(e) => p.onChange(name, e.target.value)}
                     aria-invalid={!!err}
                     aria-describedby={err ? `${id}-err` : `${id}-hint`}
-                    className={`mt-1 block h-11 w-full rounded-[var(--radius-md)] border bg-surface px-3 font-mono text-[0.9375rem] tabular-nums transition-[border-color,box-shadow] duration-150 ${
+                    className={`mt-1 block h-11 w-full rounded-md border bg-surface px-3 font-mono text-[0.9375rem] tabular-nums transition-[border-color,box-shadow] duration-150 ${
                       err ? "border-malignant" : "border-line-strong hover:border-ink-muted"
                     }`}
                   />

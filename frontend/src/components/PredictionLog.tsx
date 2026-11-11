@@ -1,6 +1,5 @@
-import type { ModelsResponse, StatsResponse } from "../lib/api";
-import { pct } from "../lib/api";
-import type { Async } from "./ResultPanel";
+import { pct, type Async, type ModelsResponse, type StatsResponse } from "../lib/api";
+import { ErrorState } from "./ErrorState";
 
 const timeAgo = (iso: string) => {
   const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
@@ -34,12 +33,12 @@ export function PredictionLog({
       </p>
 
       {stats.state === "error" ? (
-        <div role="alert" className="mt-4 rounded-[var(--radius-md)] bg-sunken p-4 text-sm">
-          <p className="font-medium">History is unavailable right now</p>
-          <p className="mt-1 text-ink-muted">{stats.message} Predictions still work.</p>
-          <button type="button" className="btn btn-ghost mt-3 text-sm" onClick={onRetry}>
-            Try again
-          </button>
+        <div className="mt-5">
+          <ErrorState
+            title="History is unavailable right now"
+            message={`${stats.message} Predictions still work.`}
+            onRetry={onRetry}
+          />
         </div>
       ) : stats.state !== "done" ? (
         <div className="mt-5 space-y-3" aria-label="Loading prediction log">
@@ -53,7 +52,7 @@ export function PredictionLog({
           ))}
         </div>
       ) : stats.data.total === 0 ? (
-        <p className="mt-5 rounded-[var(--radius-md)] bg-sunken p-4 text-sm text-ink-muted">
+        <p className="mt-5 rounded-md bg-sunken p-4 text-sm text-ink-muted">
           No predictions yet. Run one above and it will appear here.
         </p>
       ) : (
@@ -114,7 +113,7 @@ export function PredictionLog({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[var(--radius-md)] bg-sunken px-3 py-3">
+    <div className="rounded-md bg-sunken px-3 py-3">
       <dt className="text-xs text-ink-muted">{label}</dt>
       <dd className="mt-0.5 font-mono text-xl font-medium tabular-nums">{value}</dd>
     </div>

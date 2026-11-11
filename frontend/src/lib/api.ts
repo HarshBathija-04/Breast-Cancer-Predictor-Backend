@@ -1,5 +1,11 @@
 const BASE = (import.meta.env.VITE_API_URL ?? "http://localhost:5108").replace(/\/$/, "");
 
+export type Async<T> =
+  | { state: "idle" }
+  | { state: "loading" }
+  | { state: "error"; message: string }
+  | { state: "done"; data: T };
+
 export type Diagnosis = "benign" | "malignant";
 export interface PredictionResult {
   label: 0 | 1;
@@ -63,6 +69,7 @@ export class ApiError extends Error {
 
 // Render's free tier sleeps; the first request can take 30-60 s. Listeners drive the "waking up" banner.
 const SLOW_MS = 4000;
+const wait = () => new Promise((r) => setTimeout(r, 3000));
 let slow = 0;
 const listeners = new Set<(waking: boolean) => void>();
 const notify = () => listeners.forEach((l) => l(slow > 0));
@@ -90,7 +97,7 @@ async function request<T>(path: string, init?: RequestInit, retries = 0): Promis
         if (res.ok) return body as T;
         // 502/503 while the instance boots: retry idempotent calls.
         if ((res.status === 502 || res.status === 503) && attempt < retries) {
-          await new Promise((r) => setTimeout(r, 3000));
+          await wait();
           continue;
         }
         const err = body?.error;
@@ -105,7 +112,7 @@ async function request<T>(path: string, init?: RequestInit, retries = 0): Promis
       } catch (e) {
         if (e instanceof ApiError) throw e;
         if (attempt < retries) {
-          await new Promise((r) => setTimeout(r, 3000));
+          await wait();
           continue;
         }
         throw new ApiError(

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import type { ModelInfo, ModelsResponse } from "../lib/api";
-import { pct } from "../lib/api";
-import type { Async } from "./ResultPanel";
+import { pct, type Async, type ModelInfo, type ModelsResponse } from "../lib/api";
+import { ErrorState } from "./ErrorState";
 
 const METRICS = [
   { key: "accuracy", label: "Accuracy", help: "Share of all test cases classified correctly." },
@@ -39,7 +38,7 @@ export function ModelComparison({
         <div
           role="radiogroup"
           aria-label="Metric"
-          className="flex flex-wrap gap-1 rounded-[var(--radius-md)] bg-sunken p-1"
+          className="flex flex-wrap gap-1 rounded-md bg-sunken p-1"
         >
           {METRICS.map((x) => (
             <button
@@ -48,7 +47,7 @@ export function ModelComparison({
               role="radio"
               aria-checked={metric === x.key}
               onClick={() => setMetric(x.key)}
-              className={`min-h-10 rounded-[6px] px-3 text-sm font-medium transition-[background-color,color] duration-150 ${
+              className={`min-h-10 rounded-sm px-3 text-sm font-medium transition-[background-color,color] duration-150 ${
                 metric === x.key
                   ? "bg-surface text-ink shadow-[var(--shadow-card)]"
                   : "text-ink-muted hover:text-ink"
@@ -69,13 +68,11 @@ export function ModelComparison({
             ))}
           </div>
         ) : models.state === "error" ? (
-          <div role="alert" className="rounded-[var(--radius-md)] bg-malignant-soft p-4 text-sm">
-            <p className="font-medium text-malignant">Couldn’t load model metrics</p>
-            <p className="mt-1 text-ink-soft">{models.message}</p>
-            <button type="button" className="btn btn-ghost mt-3 text-sm" onClick={onRetry}>
-              Try again
-            </button>
-          </div>
+          <ErrorState
+            title="Couldn’t load model metrics"
+            message={models.message}
+            onRetry={onRetry}
+          />
         ) : (
           <Bars models={models.data.models} metric={metric} />
         )}
@@ -100,9 +97,9 @@ function Bars({ models, metric }: { models: ModelInfo[]; metric: MetricKey }) {
               className="grid grid-cols-[minmax(0,9.5rem)_minmax(0,1fr)_3.5rem] items-center gap-3 sm:grid-cols-[12rem_minmax(0,1fr)_4rem]"
             >
               <span className="truncate text-sm">{model.name}</span>
-              <div className="h-6 rounded-[6px] bg-sunken" aria-hidden>
+              <div className="h-6 rounded-sm bg-sunken" aria-hidden>
                 <div
-                  className={`h-full rounded-[6px] transition-[width] duration-500 ease-out ${i === 0 ? "bg-brand" : "bg-[#8fa9a6]"}`}
+                  className={`h-full rounded-sm transition-[width] duration-500 ease-out ${i === 0 ? "bg-brand" : "bg-[#8fa9a6]"}`}
                   style={{ width: `${w}%` }}
                 />
               </div>
