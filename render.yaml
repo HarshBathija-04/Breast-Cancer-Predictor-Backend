@@ -1,0 +1,26 @@
+# Render Blueprint. The shared Postgres database is created once by hand (no databases: block);
+# set DATABASE_URL to its connection string. Tables live in the DB_SCHEMA schema.
+services:
+  - type: web
+    name: breast-cancer-predictor-api
+    runtime: python
+    plan: free
+    rootDir: .
+    buildCommand: pip install -r requirements.txt
+    # Migrations + idempotent demo seed run on every boot (free plan has no pre-deploy step).
+    startCommand: python -m predictor.migrate && gunicorn app:app --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: FLASK_ENV
+        value: production
+      - key: DB_SCHEMA
+        value: breast_cancer
+      - key: DATABASE_URL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
