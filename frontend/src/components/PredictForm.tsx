@@ -78,7 +78,7 @@ export function PredictForm(p: Props) {
           id="model"
           value={p.model}
           onChange={(e) => p.onModel(e.target.value)}
-          className="mt-1.5 block h-11 w-full rounded-md border border-line-strong bg-surface px-3 text-[0.9375rem]"
+          className="mt-1.5 block h-11 w-full cursor-pointer rounded-md border border-field bg-surface px-3 text-[0.9375rem] transition-colors duration-150 hover:border-ink-muted"
         >
           {(p.models ?? FALLBACK_MODELS).map((m) => (
             <option key={m.id} value={m.id}>
@@ -151,8 +151,8 @@ export function PredictForm(p: Props) {
               const err = p.errors[name];
               return (
                 <div key={name}>
-                  <label htmlFor={id} className="flex items-baseline justify-between gap-2 text-sm">
-                    <span className="font-medium">{b.label}</span>
+                  <label htmlFor={id} className="text-sm font-medium">
+                    {b.label}
                   </label>
                   <input
                     id={id}
@@ -166,7 +166,7 @@ export function PredictForm(p: Props) {
                     aria-invalid={!!err}
                     aria-describedby={err ? `${id}-err` : `${id}-hint`}
                     className={`mt-1 block h-11 w-full rounded-md border bg-surface px-3 font-mono text-[0.9375rem] tabular-nums transition-[border-color,box-shadow] duration-150 ${
-                      err ? "border-malignant" : "border-line-strong hover:border-ink-muted"
+                      err ? "border-malignant" : "border-field hover:border-ink-muted"
                     }`}
                   />
                   {err ? (
@@ -186,8 +186,16 @@ export function PredictForm(p: Props) {
       ))}
 
       <div className="mt-6 flex flex-col-reverse items-stretch gap-3 border-t border-line pt-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-ink-muted">Results are for learning purposes only.</p>
+        <p className="text-xs text-ink-muted">
+          Runs the selected model, plus the other six for comparison.
+        </p>
         <button type="submit" className="btn btn-primary sm:min-w-44" disabled={p.busy}>
+          {p.busy && (
+            <span
+              className="size-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+              aria-hidden
+            />
+          )}
           {p.busy ? "Running models…" : "Run prediction"}
         </button>
       </div>

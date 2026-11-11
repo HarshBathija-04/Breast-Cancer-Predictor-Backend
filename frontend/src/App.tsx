@@ -68,7 +68,10 @@ export default function App() {
       );
       if (data.logged) load(api.stats, setStats);
       if (window.matchMedia("(max-width: 1023px)").matches) {
-        document.getElementById("result")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        document
+          .getElementById("result")
+          ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
       }
     } catch (e) {
       setResult({ state: "error", message: message(e) });
@@ -134,7 +137,7 @@ export default function App() {
       <div
         role="note"
         aria-label="Medical disclaimer"
-        className="border-b border-[#ecd9ad] bg-caution-soft"
+        className="border-b border-caution-line bg-caution-soft"
       >
         <div className="mx-auto flex max-w-6xl gap-3 px-4 py-3 text-sm text-caution sm:px-6">
           <svg
@@ -189,10 +192,10 @@ export default function App() {
                 <dt className="text-xs text-ink-muted">{s.k}</dt>
                 <dd className="mt-1 font-mono text-xl font-medium tabular-nums sm:text-2xl">
                   {s.v ?? (
-                    <span
-                      className="skeleton inline-block h-6 w-14 align-middle"
-                      aria-label="Loading"
-                    />
+                    <>
+                      <span className="skeleton inline-block h-6 w-14 align-middle" aria-hidden />
+                      <span className="sr-only">Loading</span>
+                    </>
                   )}
                 </dd>
               </div>

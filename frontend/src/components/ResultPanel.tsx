@@ -70,7 +70,8 @@ function EmptyState() {
       </svg>
       <p className="mt-4 font-medium">No prediction yet</p>
       <p className="mx-auto mt-1 max-w-xs text-sm text-ink-muted">
-        Load the benign or malignant sample, then run the prediction to see every model’s verdict.
+        A real benign sample is already filled in. Run the prediction to see all seven models’
+        verdicts, or load the malignant sample first.
       </p>
     </div>
   );
@@ -78,7 +79,7 @@ function EmptyState() {
 
 function ResultSkeleton() {
   return (
-    <div className="space-y-4" aria-label="Loading result">
+    <div className="space-y-4" role="status" aria-label="Running every model">
       <div className="skeleton h-5 w-28" />
       <div className="skeleton h-10 w-3/4" />
       <div className="skeleton h-3 w-full" />
@@ -178,17 +179,22 @@ function Verdict({
           <h3 className="text-sm font-semibold">Plain-language explanation</h3>
           {explanation.state !== "loading" && (
             <button type="button" className="btn btn-ghost text-sm" onClick={onExplain}>
-              {explanation.state === "done" ? "Regenerate" : "Explain this result"}
+              {explanation.state === "done"
+                ? "Regenerate"
+                : explanation.state === "error"
+                  ? "Try again"
+                  : "Explain this result"}
             </button>
           )}
         </div>
         {explanation.state === "idle" && (
           <p className="mt-2 text-sm text-ink-muted">
-            An AI model (Groq) summarises which measurements drove the result.
+            Ask an AI model (via Groq) which measurements pushed the result towards benign or
+            malignant.
           </p>
         )}
         {explanation.state === "loading" && (
-          <div className="mt-3 space-y-2" aria-label="Writing explanation">
+          <div className="mt-3 space-y-2" role="status" aria-label="Writing explanation">
             <div className="skeleton h-3.5 w-full" />
             <div className="skeleton h-3.5 w-11/12" />
             <div className="skeleton h-3.5 w-4/5" />

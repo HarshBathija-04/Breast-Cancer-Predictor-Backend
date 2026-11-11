@@ -41,7 +41,7 @@ export function PredictionLog({
           />
         </div>
       ) : stats.state !== "done" ? (
-        <div className="mt-5 space-y-3" aria-label="Loading prediction log">
+        <div className="mt-5 space-y-3" role="status" aria-label="Loading prediction log">
           <div className="grid grid-cols-3 gap-3">
             {[0, 1, 2].map((i) => (
               <div key={i} className="skeleton h-16" />

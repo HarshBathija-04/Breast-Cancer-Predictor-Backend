@@ -11,11 +11,14 @@
   --color-sunken: #efebe4;
   --color-line: #ddd6cb;
   --color-line-strong: #c4bbad;
+  /* Form-field borders: 3:1 against white (WCAG 1.4.11). */
+  --color-field: #9b9184;
   --color-ink: #14201f;
   --color-ink-soft: #3f4d4b;
   --color-ink-muted: #5d6a68;
   --color-brand: #1d3a3a;
   --color-brand-soft: #2c5654;
+  --color-brand-muted: #6a8a86;
 
   --color-benign: #0f6e62;
   --color-benign-soft: #e2f1ee;
@@ -23,6 +26,7 @@
   --color-malignant-soft: #f8e6ea;
   --color-caution: #7a4b06;
   --color-caution-soft: #fbf0d9;
+  --color-caution-line: #ecd9ad;
 
   --radius-sm: 6px;
   --radius-md: 10px;

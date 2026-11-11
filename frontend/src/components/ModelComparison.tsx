@@ -36,16 +36,15 @@ export function ModelComparison({
           </p>
         </div>
         <div
-          role="radiogroup"
-          aria-label="Metric"
+          role="group"
+          aria-label="Metric to compare"
           className="flex flex-wrap gap-1 rounded-md bg-sunken p-1"
         >
           {METRICS.map((x) => (
             <button
               key={x.key}
               type="button"
-              role="radio"
-              aria-checked={metric === x.key}
+              aria-pressed={metric === x.key}
               onClick={() => setMetric(x.key)}
               className={`min-h-10 rounded-sm px-3 text-sm font-medium transition-[background-color,color] duration-150 ${
                 metric === x.key
@@ -62,7 +61,7 @@ export function ModelComparison({
 
       <div className="mt-4">
         {models.state === "loading" || models.state === "idle" ? (
-          <div className="space-y-3" aria-label="Loading model metrics">
+          <div className="space-y-3" role="status" aria-label="Loading model metrics">
             {Array.from({ length: 7 }, (_, i) => (
               <div key={i} className="skeleton h-7 w-full" />
             ))}
@@ -99,7 +98,7 @@ function Bars({ models, metric }: { models: ModelInfo[]; metric: MetricKey }) {
               <span className="truncate text-sm">{model.name}</span>
               <div className="h-6 rounded-sm bg-sunken" aria-hidden>
                 <div
-                  className={`h-full rounded-sm transition-[width] duration-500 ease-out ${i === 0 ? "bg-brand" : "bg-[#8fa9a6]"}`}
+                  className={`h-full rounded-sm transition-[width] duration-500 ease-out ${i === 0 ? "bg-brand" : "bg-brand-muted"}`}
                   style={{ width: `${w}%` }}
                 />
               </div>
