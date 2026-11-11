@@ -1,0 +1,322 @@
+{
+  "dataset": "Wisconsin Diagnostic Breast Cancer (569 samples, 30 features)",
+  "test_size": 114,
+  "models": {
+    "random_forest_tuned": {
+      "name": "Random Forest (tuned)",
+      "algorithm": "RandomForestClassifier",
+      "best_params": {
+        "n_estimators": 450
+      },
+      "accuracy": 0.9825,
+      "precision": 0.9512,
+      "recall": 1.0,
+      "f1": 0.975,
+      "roc_auc": 0.9969,
+      "confusion_matrix": {
+        "tn": 73,
+        "fp": 2,
+        "fn": 0,
+        "tp": 39
+      },
+      "has_probability": true
+    },
+    "random_forest": {
+      "name": "Random Forest",
+      "algorithm": "RandomForestClassifier",
+      "best_params": {
+        "n_estimators": 100
+      },
+      "accuracy": 0.9737,
+      "precision": 0.95,
+      "recall": 0.9744,
+      "f1": 0.962,
+      "roc_auc": 0.9945,
+      "confusion_matrix": {
+        "tn": 73,
+        "fp": 2,
+        "fn": 1,
+        "tp": 38
+      },
+      "has_probability": true
+    },
+    "xgboost": {
+      "name": "XGBoost",
+      "algorithm": "XGBClassifier",
+      "best_params": {
+        "n_estimators": 100
+      },
+      "accuracy": 0.9737,
+      "precision": 0.95,
+      "recall": 0.9744,
+      "f1": 0.962,
+      "roc_auc": 0.9969,
+      "confusion_matrix": {
+        "tn": 73,
+        "fp": 2,
+        "fn": 1,
+        "tp": 38
+      },
+      "has_probability": true
+    },
+    "decision_tree": {
+      "name": "Decision Tree",
+      "algorithm": "DecisionTreeClassifier",
+      "best_params": {
+        "min_samples_split": 6
+      },
+      "accuracy": 0.9386,
+      "precision": 0.9,
+      "recall": 0.9231,
+      "f1": 0.9114,
+      "roc_auc": 0.9303,
+      "confusion_matrix": {
+        "tn": 71,
+        "fp": 4,
+        "fn": 3,
+        "tp": 36
+      },
+      "has_probability": true
+    },
+    "logistic_regression": {
+      "name": "Logistic Regression",
+      "algorithm": "LogisticRegression",
+      "best_params": {
+        "C": 1.2
+      },
+      "accuracy": 0.9298,
+      "precision": 0.878,
+      "recall": 0.9231,
+      "f1": 0.9,
+      "roc_auc": 0.9846,
+      "confusion_matrix": {
+        "tn": 70,
+        "fp": 5,
+        "fn": 3,
+        "tp": 36
+      },
+      "has_probability": true
+    },
+    "svc": {
+      "name": "Support Vector Machine",
+      "algorithm": "SVC",
+      "best_params": {
+        "C": 0.8,
+        "gamma": 0.0009
+      },
+      "accuracy": 0.9298,
+      "precision": 0.8974,
+      "recall": 0.8974,
+      "f1": 0.8974,
+      "roc_auc": 0.9634,
+      "confusion_matrix": {
+        "tn": 71,
+        "fp": 4,
+        "fn": 4,
+        "tp": 35
+      },
+      "has_probability": false
+    },
+    "knn": {
+      "name": "k-Nearest Neighbors",
+      "algorithm": "KNeighborsClassifier",
+      "best_params": {
+        "n_neighbors": 16
+      },
+      "accuracy": 0.9123,
+      "precision": 0.9143,
+      "recall": 0.8205,
+      "f1": 0.8649,
+      "roc_auc": 0.9617,
+      "confusion_matrix": {
+        "tn": 72,
+        "fp": 3,
+        "fn": 7,
+        "tp": 32
+      },
+      "has_probability": true
+    }
+  },
+  "feature_stats": {
+    "radius_mean": {
+      "min": 6.981,
+      "max": 28.11,
+      "benign_median": 12.2,
+      "malignant_median": 17.325000000000003
+    },
+    "texture_mean": {
+      "min": 9.71,
+      "max": 39.28,
+      "benign_median": 17.39,
+      "malignant_median": 21.46
+    },
+    "perimeter_mean": {
+      "min": 43.79,
+      "max": 188.5,
+      "benign_median": 78.18,
+      "malignant_median": 114.2
+    },
+    "area_mean": {
+      "min": 143.5,
+      "max": 2501.0,
+      "benign_median": 458.4,
+      "malignant_median": 932.0
+    },
+    "smoothness_mean": {
+      "min": 0.05263,
+      "max": 0.1634,
+      "benign_median": 0.09076,
+      "malignant_median": 0.1022
+    },
+    "compactness_mean": {
+      "min": 0.01938,
+      "max": 0.3454,
+      "benign_median": 0.07529,
+      "malignant_median": 0.13235
+    },
+    "concavity_mean": {
+      "min": 0.0,
+      "max": 0.4268,
+      "benign_median": 0.03709,
+      "malignant_median": 0.15134999999999998
+    },
+    "concave points_mean": {
+      "min": 0.0,
+      "max": 0.2012,
+      "benign_median": 0.02344,
+      "malignant_median": 0.08628
+    },
+    "symmetry_mean": {
+      "min": 0.106,
+      "max": 0.304,
+      "benign_median": 0.1714,
+      "malignant_median": 0.1899
+    },
+    "fractal_dimension_mean": {
+      "min": 0.04996,
+      "max": 0.09744,
+      "benign_median": 0.06154,
+      "malignant_median": 0.061575000000000005
+    },
+    "radius_se": {
+      "min": 0.1115,
+      "max": 2.873,
+      "benign_median": 0.2575,
+      "malignant_median": 0.5472
+    },
+    "texture_se": {
+      "min": 0.3602,
+      "max": 4.885,
+      "benign_median": 1.108,
+      "malignant_median": 1.1025
+    },
+    "perimeter_se": {
+      "min": 0.757,
+      "max": 21.98,
+      "benign_median": 1.851,
+      "malignant_median": 3.6795
+    },
+    "area_se": {
+      "min": 6.802,
+      "max": 542.2,
+      "benign_median": 19.63,
+      "malignant_median": 58.455
+    },
+    "smoothness_se": {
+      "min": 0.001713,
+      "max": 0.03113,
+      "benign_median": 0.00653,
+      "malignant_median": 0.0062095
+    },
+    "compactness_se": {
+      "min": 0.002252,
+      "max": 0.1354,
+      "benign_median": 0.01631,
+      "malignant_median": 0.028589999999999997
+    },
+    "concavity_se": {
+      "min": 0.0,
+      "max": 0.396,
+      "benign_median": 0.0184,
+      "malignant_median": 0.037125000000000005
+    },
+    "concave points_se": {
+      "min": 0.0,
+      "max": 0.05279,
+      "benign_median": 0.009061,
+      "malignant_median": 0.014205
+    },
+    "symmetry_se": {
+      "min": 0.007882,
+      "max": 0.07895,
+      "benign_median": 0.01909,
+      "malignant_median": 0.0177
+    },
+    "fractal_dimension_se": {
+      "min": 0.0008948,
+      "max": 0.02984,
+      "benign_median": 0.002808,
+      "malignant_median": 0.0037394999999999998
+    },
+    "radius_worst": {
+      "min": 7.93,
+      "max": 36.04,
+      "benign_median": 13.35,
+      "malignant_median": 20.59
+    },
+    "texture_worst": {
+      "min": 12.02,
+      "max": 49.54,
+      "benign_median": 22.82,
+      "malignant_median": 28.945
+    },
+    "perimeter_worst": {
+      "min": 50.41,
+      "max": 251.2,
+      "benign_median": 86.92,
+      "malignant_median": 138.0
+    },
+    "area_worst": {
+      "min": 185.2,
+      "max": 4254.0,
+      "benign_median": 547.4,
+      "malignant_median": 1303.0
+    },
+    "smoothness_worst": {
+      "min": 0.07117,
+      "max": 0.2226,
+      "benign_median": 0.1254,
+      "malignant_median": 0.14345
+    },
+    "compactness_worst": {
+      "min": 0.02729,
+      "max": 1.058,
+      "benign_median": 0.1698,
+      "malignant_median": 0.35635
+    },
+    "concavity_worst": {
+      "min": 0.0,
+      "max": 1.252,
+      "benign_median": 0.1412,
+      "malignant_median": 0.4049
+    },
+    "concave points_worst": {
+      "min": 0.0,
+      "max": 0.291,
+      "benign_median": 0.07431,
+      "malignant_median": 0.182
+    },
+    "symmetry_worst": {
+      "min": 0.1565,
+      "max": 0.6638,
+      "benign_median": 0.2687,
+      "malignant_median": 0.3103
+    },
+    "fractal_dimension_worst": {
+      "min": 0.05504,
+      "max": 0.2075,
+      "benign_median": 0.07712,
+      "malignant_median": 0.08760000000000001
+    }
+  }
+}
