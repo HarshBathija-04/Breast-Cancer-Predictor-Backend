@@ -103,3 +103,17 @@ describe("App", () => {
     expect(fetchMock.mock.calls.some(([u]) => String(u).endsWith("/api/predict"))).toBe(false);
   });
 });
+
+describe("measurement tabs", () => {
+  it("move with the arrow keys", async () => {
+    mockFetch();
+    render(<App />);
+    const tabs = screen.getAllByRole("tab");
+    tabs[0].focus();
+    await userEvent.keyboard("{ArrowRight}");
+    expect(tabs[1]).toHaveAttribute("aria-selected", "true");
+    expect(tabs[1]).toHaveFocus();
+    await userEvent.keyboard("{ArrowLeft}{ArrowLeft}");
+    expect(tabs[2]).toHaveAttribute("aria-selected", "true");
+  });
+});

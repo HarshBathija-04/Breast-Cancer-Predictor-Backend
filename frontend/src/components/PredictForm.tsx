@@ -92,6 +92,16 @@ export function PredictForm(p: Props) {
         role="tablist"
         aria-label="Measurement group"
         className="mt-5 grid grid-cols-3 gap-1 rounded-[var(--radius-md)] bg-sunken p-1"
+        onKeyDown={(e) => {
+          // ARIA tabs pattern: arrow keys move between tabs.
+          const step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+          if (!step) return;
+          e.preventDefault();
+          const i = GROUPS.findIndex((g) => g.stat === tab);
+          const next = GROUPS[(i + step + GROUPS.length) % GROUPS.length].stat;
+          setTab(next);
+          document.getElementById(`tab-${next}`)?.focus();
+        }}
       >
         {GROUPS.map((g) => {
           const selected = g.stat === tab;
@@ -103,6 +113,7 @@ export function PredictForm(p: Props) {
               role="tab"
               id={`tab-${g.stat}`}
               aria-selected={selected}
+              tabIndex={selected ? 0 : -1}
               aria-controls={`panel-${g.stat}`}
               onClick={() => setTab(g.stat)}
               className={`relative min-h-10 rounded-[6px] px-2 text-sm font-medium transition-[background-color,color,box-shadow] duration-150 ${
