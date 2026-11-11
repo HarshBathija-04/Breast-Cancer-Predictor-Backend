@@ -151,7 +151,7 @@ export function PredictForm(p: Props) {
               const err = p.errors[name];
               return (
                 <div key={name}>
-                  <label htmlFor={id} className="text-sm font-medium">
+                  <label htmlFor={id} className="block text-sm font-medium">
                     {b.label}
                   </label>
                   <input
