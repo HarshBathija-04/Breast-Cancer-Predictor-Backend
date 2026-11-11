@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f4ef"/>
+  <rect x="0" y="0" width="1200" height="14" fill="#1d3a3a"/>
+  <circle cx="960" cy="315" r="170" fill="none" stroke="#e8c4cb" stroke-width="18"/>
+  <circle cx="985" cy="290" r="62" fill="#c2485f" opacity="0.85"/>
+  <text x="90" y="250" font-family="Georgia, serif" font-size="76" fill="#14201f" font-weight="600">Breast Cancer</text>
+  <text x="90" y="340" font-family="Georgia, serif" font-size="76" fill="#14201f" font-weight="600">Predictor</text>
+  <text x="90" y="420" font-family="Helvetica, Arial, sans-serif" font-size="30" fill="#4a5a58">Seven trained models · plain-language AI explanations</text>
+  <text x="90" y="520" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#8a5a12">Educational demo. Not a diagnosis.</text>
+</svg>
